@@ -7,508 +7,208 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#EEF2FF;--surface:#FFF;--sf2:#F5F7FF;--border:#DDE4F5;
+  --t1:#1A1A3E;--t2:#4F46E5;--t3:#A5B0D8;
+  --amber:#E8651A;--amb-l:#FFF5EF;--amb-d:#FDD5B8;
+  --green:#10B981;--grn-l:#D1FAE5;
+  --sh-s:0 1px 3px rgba(26,26,62,.05),0 4px 12px rgba(26,26,62,.06);
+  --sh-m:0 4px 24px rgba(26,26,62,.09),0 1px 4px rgba(26,26,62,.04);
+}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;max-width:520px;margin:0 auto}
 
-:root {
-  --bg:      #EEF2FF;
-  --surface: #FFFFFF;
-  --sf2:     #F5F7FF;
-  --border:  #DDE4F5;
-  --t1:      #1A1A3E;
-  --t2:      #4F46E5;
-  --t3:      #A5B0D8;
-  --amber:   #E8651A;
-  --amb-l:   #FFF5EF;
-  --amb-d:   #FDD5B8;
-  --green:   #10B981;
-  --grn-l:   #D1FAE5;
-  --sh-s: 0 1px 3px rgba(26,26,62,.05), 0 4px 12px rgba(26,26,62,.06);
-  --sh-m: 0 4px 24px rgba(26,26,62,.09), 0 1px 4px rgba(26,26,62,.04);
-}
+/* TABS */
+.tabs{display:flex;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--sh-s)}
+.tab-btn{flex:1;padding:15px 8px;border:none;background:none;font-family:inherit;font-size:14px;font-weight:500;color:var(--t3);cursor:pointer;transition:color .2s;letter-spacing:.02em}
+.tab-btn.active{color:var(--amber);box-shadow:inset 0 -2.5px 0 var(--amber)}
+.pane{display:none}.pane.active{display:block}
 
-body {
-  font-family: 'DM Sans', system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--t1);
-  min-height: 100vh;
-  max-width: 520px;
-  margin: 0 auto;
+/* MORNING HEADER */
+.m-header{background:var(--surface);padding:14px 20px 14px;border-bottom:1px solid var(--border)}
+.m-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px}
+.clock{font-family:'DM Mono',monospace;font-size:32px;font-weight:300;letter-spacing:-.03em}
+.arr-wrap{text-align:right}
+.arr-label{font-size:10px;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:2px}
+.arr-input-wrap{display:flex;align-items:center;gap:5px;justify-content:flex-end}
+.arr-emoji{font-size:15px}
+#arr-input{
+  font-family:'DM Mono',monospace;font-size:20px;font-weight:500;
+  border:none;border-bottom:2px solid var(--amb-d);background:transparent;
+  color:var(--amber);outline:none;cursor:pointer;padding:0 2px;
+  width:82px;text-align:center;border-radius:0;
+  -webkit-appearance:none
 }
+#arr-input:focus{border-bottom-color:var(--amber)}
+.prog-bar{height:5px;background:var(--border);border-radius:100px;overflow:hidden;margin-bottom:7px}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--amber),var(--green));border-radius:100px;transition:width .5s ease;width:0%}
+.prog-foot{display:flex;justify-content:space-between;align-items:center}
+.prog-text{font-size:12px;color:var(--t3);font-weight:500}
+.eta-text{font-size:12px;color:var(--t3);font-weight:500}
+.eta-text span{color:var(--t2);font-family:'DM Mono',monospace}
 
-/* ── TABS ── */
-.tabs {
-  display: flex;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: var(--sh-s);
-}
-.tab-btn {
-  flex: 1;
-  padding: 15px 8px;
-  border: none;
-  background: none;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--t3);
-  cursor: pointer;
-  transition: color .2s;
-  letter-spacing: .02em;
-}
-.tab-btn.active {
-  color: var(--amber);
-  box-shadow: inset 0 -2.5px 0 var(--amber);
-}
+/* START SCREEN */
+#start-screen{padding:32px 24px 22px;text-align:center}
+.s-greeting{font-size:38px;font-weight:300;letter-spacing:-.03em;margin-bottom:6px}
+.s-sub{font-size:15px;color:var(--t3);margin-bottom:6px;line-height:1.65}
+.wake-hint{font-size:13px;color:var(--amber);font-family:'DM Mono',monospace;margin-bottom:24px;font-weight:500}
+.s-tips{background:var(--amb-l);border:1px solid var(--amb-d);border-radius:16px;padding:16px 20px;font-size:14px;line-height:2;text-align:left;margin-bottom:28px}
+.s-tips-label{display:block;font-size:10px;font-weight:700;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.btn-start{background:var(--amber);color:#fff;border:none;border-radius:100px;padding:16px 52px;font-family:inherit;font-size:16px;font-weight:600;cursor:pointer;box-shadow:0 4px 20px rgba(232,101,26,.4);transition:transform .15s,box-shadow .15s}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(232,101,26,.5)}
 
-/* ── PANES ── */
-.pane { display: none; }
-.pane.active { display: block; }
+/* ACTIVE TASK CARD */
+#task-card{margin:14px 16px;background:var(--surface);border-radius:22px;padding:22px 22px 18px;box-shadow:var(--sh-m);display:none}
+.tc-header{display:flex;align-items:center;gap:13px;margin-bottom:18px}
+.tc-emoji{font-size:30px;line-height:1}
+.tc-name{font-size:20px;font-weight:600;letter-spacing:-.01em}
+.tc-note{font-size:13px;color:var(--t3);margin-top:3px}
 
-/* ──────────────────────────────
-   MORNING PANE
-────────────────────────────── */
+/* RING */
+.ring-wrap{position:relative;width:min(190px,58vw);height:min(190px,58vw);margin:0 auto 20px}
+.ring-svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:var(--border);stroke-width:10}
+.ring-prog{fill:none;stroke:var(--amber);stroke-width:10;stroke-linecap:round;stroke-dasharray:502.655;stroke-dashoffset:0;transition:stroke-dashoffset .95s linear,stroke .35s ease}
+.ring-prog.done{stroke:var(--green)}
+.ring-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-time{font-family:'DM Mono',monospace;font-size:36px;font-weight:300;letter-spacing:-.03em;line-height:1}
+.ring-sub{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-top:6px}
+@keyframes ring-glow{0%,100%{filter:drop-shadow(0 0 0px rgba(232,101,26,0))}50%{filter:drop-shadow(0 0 12px rgba(232,101,26,.65))}}
+.ring-svg.glowing{animation:ring-glow 1.3s ease infinite}
 
-/* Header strip */
-.m-header {
-  background: var(--surface);
-  padding: 14px 20px 16px;
-  border-bottom: 1px solid var(--border);
-}
-.m-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 12px;
-}
-.clock {
-  font-family: 'DM Mono', monospace;
-  font-size: 32px;
-  font-weight: 300;
-  color: var(--t1);
-  letter-spacing: -.03em;
-}
-.eta-wrap { text-align: right; }
-.eta-label {
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--t3);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-}
-.eta-val {
-  font-family: 'DM Mono', monospace;
-  font-size: 20px;
-  color: var(--t2);
-  font-weight: 400;
-  letter-spacing: -.02em;
-}
-.prog-bar {
-  height: 5px;
-  background: var(--border);
-  border-radius: 100px;
-  overflow: hidden;
-  margin-bottom: 7px;
-}
-.prog-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--amber), var(--green));
-  border-radius: 100px;
-  transition: width .5s ease;
-  width: 0%;
-}
-.prog-text { font-size: 12px; color: var(--t3); font-weight: 500; }
+/* MIT */
+.mit-box{background:var(--sf2);border:1.5px solid var(--border);border-radius:13px;padding:12px 15px;margin-bottom:15px;display:none}
+.mit-label{font-size:10px;font-weight:700;color:var(--t2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+input.mit-input{width:100%;border:none;background:transparent;font-family:inherit;font-size:15px;color:var(--t1);outline:none}
+input.mit-input::placeholder{color:var(--t3)}
 
-/* ── Start screen ── */
-#start-screen { padding: 36px 24px 32px; text-align: center; }
-.s-greeting {
-  font-size: 38px;
-  font-weight: 300;
-  letter-spacing: -.03em;
-  margin-bottom: 6px;
-}
-.s-sub {
-  font-size: 15px;
-  color: var(--t3);
-  margin-bottom: 28px;
-  line-height: 1.65;
-}
-.s-tips {
-  background: var(--amb-l);
-  border: 1px solid var(--amb-d);
-  border-radius: 16px;
-  padding: 18px 20px;
-  font-size: 14px;
-  line-height: 2;
-  text-align: left;
-  margin-bottom: 30px;
-}
-.s-tips-label {
-  display: block;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--amber);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
-.btn-start {
-  background: var(--amber);
-  color: #fff;
-  border: none;
-  border-radius: 100px;
-  padding: 16px 52px;
-  font-family: inherit;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 4px 20px rgba(232,101,26,.4);
-  transition: transform .15s, box-shadow .15s;
-  letter-spacing: .01em;
-}
-.btn-start:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(232,101,26,.5); }
-.btn-start:active { transform: none; }
+/* BUTTONS */
+.btn-row{display:flex;gap:10px;margin-bottom:14px}
+.btn-sec{flex:1;background:var(--sf2);border:1px solid var(--border);border-radius:13px;padding:13px 8px;font-family:inherit;font-size:14px;font-weight:500;color:var(--t2);cursor:pointer;transition:background .15s}
+.btn-sec:hover{background:var(--border)}
+.btn-pri{flex:2;background:var(--amber);border:none;border-radius:13px;padding:13px 8px;font-family:inherit;font-size:14px;font-weight:600;color:#fff;cursor:pointer;box-shadow:0 2px 10px rgba(232,101,26,.28);transition:opacity .15s}
+.btn-pri:hover{opacity:.9}
+.mode-row{display:flex;align-items:center;justify-content:center;gap:9px;font-size:13px;color:var(--t3)}
+.toggle-sw{position:relative;display:inline-block;width:42px;height:23px;cursor:pointer}
+.toggle-sw input{opacity:0;width:0;height:0}
+.toggle-knob{position:absolute;inset:0;background:var(--border);border-radius:100px;transition:.2s}
+.toggle-knob::before{content:'';position:absolute;width:17px;height:17px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+input:checked~.toggle-knob{background:var(--amber)}
+input:checked~.toggle-knob::before{transform:translateX(19px)}
+.mode-active{font-weight:500;color:var(--t1)}
 
-/* ── Active Task Card ── */
-#task-card {
-  margin: 14px 16px;
-  background: var(--surface);
-  border-radius: 22px;
-  padding: 22px 22px 18px;
-  box-shadow: var(--sh-m);
-  display: none;
-}
-.tc-header { display: flex; align-items: center; gap: 13px; margin-bottom: 18px; }
-.tc-emoji { font-size: 30px; line-height: 1; }
-.tc-name { font-size: 20px; font-weight: 600; letter-spacing: -.01em; }
-.tc-note { font-size: 13px; color: var(--t3); margin-top: 3px; }
+/* TASK LIST */
+#task-list{padding:0 16px 28px}
+.tl-header{display:flex;align-items:baseline;gap:8px;padding:8px 2px 6px}
+.tl-title{font-size:11px;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase}
+.tl-hint{font-size:11px;color:var(--t3);opacity:.6}
 
-/* ── Ring Timer ── */
-.ring-wrap {
-  position: relative;
-  width: min(190px, 58vw);
-  height: min(190px, 58vw);
-  margin: 0 auto 20px;
+/* TASK CARDS (draggable) */
+.task-card{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px 10px 6px;border-radius:13px;margin-bottom:4px;
+  background:var(--surface);user-select:none;
+  transition:box-shadow .15s,opacity .2s;will-change:transform;
 }
-.ring-svg {
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
+.task-card.done{opacity:.4}
+.task-card.current{background:var(--amb-l);border:1px solid var(--amb-d);box-shadow:0 2px 8px rgba(232,101,26,.12)}
+.drag-handle{
+  cursor:grab;padding:4px 7px;color:var(--t3);flex-shrink:0;
+  touch-action:none;-webkit-user-select:none;
+  display:flex;align-items:center;border-radius:6px;
+  transition:color .15s,background .15s;-webkit-tap-highlight-color:transparent;
 }
-.ring-bg { fill: none; stroke: var(--border); stroke-width: 10; }
-.ring-prog {
-  fill: none;
-  stroke: var(--amber);
-  stroke-width: 10;
-  stroke-linecap: round;
-  stroke-dasharray: 502.655;
-  stroke-dashoffset: 0;
-  transition: stroke-dashoffset .95s linear, stroke .35s ease;
-}
-.ring-prog.done { stroke: var(--green); }
-.ring-inner {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.ring-time {
-  font-family: 'DM Mono', monospace;
-  font-size: 36px;
-  font-weight: 300;
-  letter-spacing: -.03em;
-  line-height: 1;
-}
-.ring-sub {
-  font-size: 11px;
-  color: var(--t3);
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  margin-top: 6px;
-}
+.drag-handle:hover{color:var(--t2);background:var(--sf2)}
+.drag-handle:active{cursor:grabbing;color:var(--t2)}
 
-/* ── MIT Input ── */
-.mit-box {
-  background: var(--sf2);
-  border: 1.5px solid var(--border);
-  border-radius: 13px;
-  padding: 12px 15px;
-  margin-bottom: 15px;
-  display: none;
+/* Ghost (body-level during drag) */
+.drag-ghost-el{
+  position:fixed;pointer-events:none;z-index:9999;
+  display:flex;align-items:center;gap:10px;padding:10px 12px 10px 6px;
+  opacity:.85;border-radius:13px;background:var(--surface);
+  box-shadow:0 14px 44px rgba(26,26,62,.24);transform:scale(1.03);
+  transition:none!important;will-change:top,left;
 }
-.mit-label {
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--t2);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  margin-bottom: 7px;
-}
-input.mit-input {
-  width: 100%;
-  border: none;
-  background: transparent;
-  font-family: inherit;
-  font-size: 15px;
-  color: var(--t1);
-  outline: none;
-}
-input.mit-input::placeholder { color: var(--t3); }
+/* Drop spacer */
+.drag-spacer{background:var(--amb-l);border:1.5px dashed var(--amb-d);border-radius:13px;margin-bottom:4px;flex-shrink:0}
 
-/* ── Task Buttons ── */
-.btn-row { display: flex; gap: 10px; margin-bottom: 14px; }
-.btn-sec {
-  flex: 1;
-  background: var(--sf2);
-  border: 1px solid var(--border);
-  border-radius: 13px;
-  padding: 13px 8px;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--t2);
-  cursor: pointer;
-  transition: background .15s;
-}
-.btn-sec:hover { background: var(--border); }
-.btn-pri {
-  flex: 2;
-  background: var(--amber);
-  border: none;
-  border-radius: 13px;
-  padding: 13px 8px;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  color: #fff;
-  cursor: pointer;
-  box-shadow: 0 2px 10px rgba(232,101,26,.28);
-  transition: opacity .15s;
-}
-.btn-pri:hover { opacity: .9; }
+/* Status icons */
+.ti-icon{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px}
+.ic-done{background:var(--grn-l);color:var(--green);font-weight:700}
+.ic-cur{background:var(--amber);width:10px;height:10px;animation:dot-pulse 1.6s ease infinite}
+.ic-up{border:2px solid var(--border)}
+@keyframes dot-pulse{0%,100%{box-shadow:0 0 0 0 rgba(232,101,26,.5)}60%{box-shadow:0 0 0 5px rgba(232,101,26,0)}}
+.ti-emoji{font-size:18px;flex-shrink:0}
+.ti-info{flex:1;min-width:0}
+.ti-name{font-size:15px;font-weight:500}
+.ti-meta{font-size:12px;color:var(--t3);font-family:'DM Mono',monospace}
+.task-card.done .ti-name{color:var(--t3)}
 
-/* ── Mode Toggle ── */
-.mode-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  font-size: 13px;
-  color: var(--t3);
-}
-.toggle-sw { position: relative; display: inline-block; width: 42px; height: 23px; cursor: pointer; }
-.toggle-sw input { opacity: 0; width: 0; height: 0; }
-.toggle-knob {
-  position: absolute;
-  inset: 0;
-  background: var(--border);
-  border-radius: 100px;
-  transition: .2s;
-}
-.toggle-knob::before {
-  content: '';
-  position: absolute;
-  width: 17px; height: 17px;
-  left: 3px; top: 3px;
-  background: #fff;
-  border-radius: 50%;
-  transition: .2s;
-  box-shadow: 0 1px 3px rgba(0,0,0,.15);
-}
-input:checked ~ .toggle-knob { background: var(--amber); }
-input:checked ~ .toggle-knob::before { transform: translateX(19px); }
-.mode-active { font-weight: 500; color: var(--t1); }
+/* DONE SCREEN */
+#done-screen{padding:48px 24px 40px;text-align:center;display:none}
+.done-icon{font-size:64px;margin-bottom:14px}
+.done-title{font-size:34px;font-weight:600;letter-spacing:-.03em;margin-bottom:6px}
+.done-sub{font-size:15px;color:var(--t3);margin-bottom:28px;line-height:1.65}
+.done-mit{background:var(--amb-l);border:1px solid var(--amb-d);border-radius:14px;padding:16px 18px;font-size:15px;text-align:left;margin-bottom:28px;line-height:1.55;display:none}
+.done-mit strong{display:block;font-size:10px;font-weight:700;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.btn-reset{background:transparent;border:1.5px solid var(--border);border-radius:100px;padding:12px 32px;font-family:inherit;font-size:14px;color:var(--t3);cursor:pointer;transition:all .15s}
+.btn-reset:hover{border-color:var(--t2);color:var(--t2)}
 
-/* ── Task List ── */
-#task-list { padding: 0 16px 28px; display: none; }
-.tl-title {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--t3);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  padding: 8px 2px 6px;
-}
-.task-item {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 11px 12px;
-  border-radius: 13px;
-  margin-bottom: 2px;
-  transition: background .12s;
-  cursor: pointer;
-}
-.task-item:hover { background: rgba(255,255,255,.85); }
-.task-item.done { opacity: .4; cursor: default; }
-.task-item.done:hover { background: transparent; }
-.task-item.current { background: var(--amb-l); border: 1px solid var(--amb-d); }
-.task-item.upcoming:hover { cursor: pointer; }
-
-.ti-icon {
-  width: 24px; height: 24px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  font-size: 11px;
-}
-.ic-done  { background: var(--grn-l); color: var(--green); font-weight: 700; }
-.ic-cur   { background: var(--amber); width: 10px; height: 10px; animation: dot-pulse 1.6s ease infinite; }
-.ic-up    { border: 2px solid var(--border); }
-
-@keyframes dot-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(232,101,26,.5); }
-  60%       { box-shadow: 0 0 0 5px rgba(232,101,26,0); }
-}
-
-.ti-emoji { font-size: 18px; flex-shrink: 0; }
-.ti-info  { flex: 1; min-width: 0; }
-.ti-name  { font-size: 15px; font-weight: 500; color: var(--t1); }
-.ti-meta  { font-size: 12px; color: var(--t3); font-family: 'DM Mono', monospace; }
-
-/* ── Completion Screen ── */
-#done-screen { padding: 48px 24px 40px; text-align: center; display: none; }
-.done-icon  { font-size: 64px; margin-bottom: 14px; }
-.done-title { font-size: 34px; font-weight: 600; letter-spacing: -.03em; margin-bottom: 6px; }
-.done-sub   { font-size: 15px; color: var(--t3); margin-bottom: 28px; line-height: 1.65; }
-.done-mit {
-  background: var(--amb-l);
-  border: 1px solid var(--amb-d);
-  border-radius: 14px;
-  padding: 16px 18px;
-  font-size: 15px;
-  text-align: left;
-  margin-bottom: 28px;
-  line-height: 1.55;
-  display: none;
-}
-.done-mit strong {
-  display: block;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--amber);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-}
-.btn-reset {
-  background: transparent;
-  border: 1.5px solid var(--border);
-  border-radius: 100px;
-  padding: 12px 32px;
-  font-family: inherit;
-  font-size: 14px;
-  color: var(--t3);
-  cursor: pointer;
-  transition: all .15s;
-}
-.btn-reset:hover { border-color: var(--t2); color: var(--t2); }
-
-/* Ring glow when time is up */
-@keyframes ring-glow {
-  0%, 100% { filter: drop-shadow(0 0 0px rgba(232,101,26,0)); }
-  50%       { filter: drop-shadow(0 0 12px rgba(232,101,26,.65)); }
-}
-.ring-svg.glowing { animation: ring-glow 1.3s ease infinite; }
-
-
-/* ──────────────────────────────
-   EVENING PANE  (full dark mode)
-────────────────────────────── */
-#evening-pane {
-  background: #0B1121;
-  min-height: 100vh;
-  padding: 24px 16px;
-}
-.e-header { text-align: center; padding: 20px 0 26px; }
-.e-big    { font-size: 48px; margin-bottom: 10px; }
-.e-title  { font-size: 22px; font-weight: 600; color: #ECF0FF; letter-spacing: -.01em; }
-.e-sub    { font-size: 13px; color: #3D4F72; margin-top: 5px; }
-
-.e-prog-bar  { background: #141E33; border-radius: 100px; height: 4px; overflow: hidden; margin-bottom: 7px; }
-.e-prog-fill { height: 100%; background: linear-gradient(90deg, #6C63FF, #A78BFA); border-radius: 100px; transition: width .3s; width: 0%; }
-.e-prog-text { font-size: 12px; color: #3D4F72; text-align: center; margin-bottom: 18px; }
-
-.e-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-.e-item {
-  background: #141E33;
-  border: 1px solid #1E2D48;
-  border-radius: 16px;
-  padding: 16px 16px;
-  display: flex;
-  align-items: flex-start;
-  gap: 13px;
-  cursor: pointer;
-  transition: background .12s, opacity .2s;
-}
-.e-item:hover { background: #192540; }
-.e-item.checked { opacity: .38; }
-.e-cb {
-  width: 22px; height: 22px;
-  border-radius: 7px;
-  border: 2px solid #2A3A58;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  margin-top: 1px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #fff;
-  transition: all .15s;
-}
-.e-item.checked .e-cb { background: #6C63FF; border-color: #6C63FF; }
-.e-emoji { font-size: 20px; margin-top: 2px; }
-.e-body  { flex: 1; }
-.e-name  { font-size: 15px; font-weight: 500; color: #C8D5F0; }
-.e-note  { font-size: 12px; color: #3D4F72; margin-top: 3px; line-height: 1.55; }
-
-.btn-e-reset {
-  display: block;
-  width: 100%;
-  background: transparent;
-  border: 1px solid #1E2D48;
-  border-radius: 13px;
-  padding: 13px;
-  font-family: inherit;
-  font-size: 14px;
-  color: #3D4F72;
-  cursor: pointer;
-  transition: all .15s;
-}
-.btn-e-reset:hover { border-color: #2A3A58; color: #6B7AA8; }
+/* EVENING */
+#evening-pane{background:#0B1121;min-height:100vh;padding:24px 16px}
+.e-header{text-align:center;padding:20px 0 26px}
+.e-big{font-size:48px;margin-bottom:10px}
+.e-title{font-size:22px;font-weight:600;color:#ECF0FF;letter-spacing:-.01em}
+.e-sub{font-size:13px;color:#3D4F72;margin-top:5px}
+.e-prog-bar{background:#141E33;border-radius:100px;height:4px;overflow:hidden;margin-bottom:7px}
+.e-prog-fill{height:100%;background:linear-gradient(90deg,#6C63FF,#A78BFA);border-radius:100px;transition:width .3s;width:0%}
+.e-prog-text{font-size:12px;color:#3D4F72;text-align:center;margin-bottom:18px}
+.e-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.e-item{background:#141E33;border:1px solid #1E2D48;border-radius:16px;padding:16px;display:flex;align-items:flex-start;gap:13px;cursor:pointer;transition:background .12s,opacity .2s}
+.e-item:hover{background:#192540}
+.e-item.checked{opacity:.38}
+.e-cb{width:22px;height:22px;border-radius:7px;border:2px solid #2A3A58;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:12px;font-weight:700;color:#fff;transition:all .15s}
+.e-item.checked .e-cb{background:#6C63FF;border-color:#6C63FF}
+.e-emoji{font-size:20px;margin-top:2px}
+.e-body{flex:1}
+.e-name{font-size:15px;font-weight:500;color:#C8D5F0}
+.e-note{font-size:12px;color:#3D4F72;margin-top:3px;line-height:1.55}
+.btn-e-reset{display:block;width:100%;background:transparent;border:1px solid #1E2D48;border-radius:13px;padding:13px;font-family:inherit;font-size:14px;color:#3D4F72;cursor:pointer;transition:all .15s}
+.btn-e-reset:hover{border-color:#2A3A58;color:#6B7AA8}
 </style>
 </head>
 <body>
 
-<!-- TAB BAR -->
 <div class="tabs">
   <button class="tab-btn active" id="tab-m" onclick="switchTab('morning')">☀️ 早晨</button>
   <button class="tab-btn"        id="tab-e" onclick="switchTab('evening')">🌙 前一晚準備</button>
 </div>
 
-<!-- ═══════════ MORNING PANE ═══════════ -->
 <div id="morning-pane" class="pane active">
 
-  <!-- Sticky info header -->
+  <!-- Sticky header -->
   <div class="m-header">
-    <div class="m-header-row">
+    <div class="m-top">
       <div class="clock" id="clock">--:--</div>
-      <div class="eta-wrap">
-        <div class="eta-label">預計完成</div>
-        <div class="eta-val" id="eta-val">—</div>
+      <div class="arr-wrap">
+        <span class="arr-label">🚶 抵達公司</span>
+        <div class="arr-input-wrap">
+          <input type="time" id="arr-input" value="08:45" onchange="setArrival(this.value)">
+        </div>
       </div>
     </div>
     <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
-    <div class="prog-text" id="prog-text">尚未開始</div>
+    <div class="prog-foot">
+      <div class="prog-text" id="prog-text">尚未開始</div>
+      <div class="eta-text" id="eta-text"></div>
+    </div>
   </div>
 
   <!-- Start screen -->
   <div id="start-screen">
     <div class="s-greeting">早安 Ian ☀️</div>
-    <div class="s-sub">今天是美好的一天<br>讓我們從容地開始</div>
+    <div class="s-sub">今天是美好的一天</div>
+    <div class="wake-hint" id="wake-hint">建議 7:00 起床 · 8:30 出門</div>
     <div class="s-tips">
       <span class="s-tips-label">起床後，先做這三件事</span>
       💧 喝一杯常溫水<br>
@@ -522,13 +222,8 @@ input:checked ~ .toggle-knob::before { transform: translateX(19px); }
   <div id="task-card">
     <div class="tc-header">
       <div class="tc-emoji" id="tc-emoji"></div>
-      <div>
-        <div class="tc-name" id="tc-name"></div>
-        <div class="tc-note" id="tc-note"></div>
-      </div>
+      <div><div class="tc-name" id="tc-name"></div><div class="tc-note" id="tc-note"></div></div>
     </div>
-
-    <!-- Circular countdown ring -->
     <div class="ring-wrap">
       <svg class="ring-svg" id="ring-svg" viewBox="0 0 200 200">
         <circle class="ring-bg"   cx="100" cy="100" r="80"/>
@@ -539,52 +234,44 @@ input:checked ~ .toggle-knob::before { transform: translateX(19px); }
         <div class="ring-sub"  id="ring-sub">剩餘</div>
       </div>
     </div>
-
-    <!-- MIT input (last task only) -->
     <div class="mit-box" id="mit-box">
-      <div class="mit-label">✏️&nbsp; 今日最重要的一件事 MIT</div>
-      <input class="mit-input" id="mit-input" type="text"
-        placeholder="寫下今天要完成的最重要事項…" maxlength="80">
+      <div class="mit-label">✏️&nbsp;今日最重要的一件事 MIT</div>
+      <input class="mit-input" id="mit-input" type="text" placeholder="寫下今天要完成的最重要事項…" maxlength="80">
     </div>
-
-    <!-- Control buttons -->
     <div class="btn-row">
       <button class="btn-sec" id="pause-btn" onclick="togglePause()">⏸ 暫停</button>
       <button class="btn-pri" onclick="completeTask()">完成，下一步 →</button>
     </div>
-
-    <!-- Auto/Manual toggle -->
     <div class="mode-row">
       <span>手動</span>
       <label class="toggle-sw">
-        <input type="checkbox" id="auto-chk" onchange="autoMode = this.checked">
+        <input type="checkbox" id="auto-chk" onchange="autoMode=this.checked">
         <span class="toggle-knob"></span>
       </label>
       <span class="mode-active">自動前進</span>
     </div>
   </div>
 
-  <!-- Task list -->
+  <!-- Task list (always visible) -->
   <div id="task-list">
-    <div class="tl-title">今日行程</div>
-    <div id="task-list-items"></div>
+    <div class="tl-header">
+      <span class="tl-title">今日行程</span>
+      <span class="tl-hint">⠿ 左側拖曳調整順序</span>
+    </div>
+    <div id="tli"></div>
   </div>
 
-  <!-- Completion screen -->
+  <!-- Done screen -->
   <div id="done-screen">
     <div class="done-icon">🚶</div>
     <div class="done-title">出門！</div>
-    <div class="done-sub">早晨完美結束<br>預計 8:45 抵達，好好享受今天</div>
-    <div class="done-mit" id="done-mit">
-      <strong>今日 MIT</strong>
-      <span id="done-mit-text"></span>
-    </div>
+    <div class="done-sub" id="done-sub">早晨完美結束<br>好好享受今天</div>
+    <div class="done-mit" id="done-mit"><strong>今日 MIT</strong><span id="done-mit-text"></span></div>
     <button class="btn-reset" onclick="resetRoutine()">🔄 重置，明天見</button>
   </div>
 
-</div><!-- end morning-pane -->
+</div>
 
-<!-- ═══════════ EVENING PANE ═══════════ -->
 <div id="evening-pane" class="pane">
   <div class="e-header">
     <div class="e-big">🌙</div>
@@ -598,306 +285,304 @@ input:checked ~ .toggle-knob::before { transform: translateX(19px); }
 </div>
 
 <script>
-/* ═══════════════════════════════════════
-   DATA
-═══════════════════════════════════════ */
-const TASKS = [
-  { emoji:'🚽', name:'上廁所',              dur:15*60, note:'',             sched:'7:00' },
-  { emoji:'🧴', name:'洗臉',                dur: 5*60, note:'',             sched:'7:15' },
-  { emoji:'💇', name:'整理頭髮',            dur:13*60, note:'放音樂享受 🎵', sched:'7:20' },
-  { emoji:'☕', name:'咖啡 + 早餐',         dur:20*60, note:'不看手機 📵',   sched:'7:33' },
-  { emoji:'🚬', name:'抽菸',                dur:10*60, note:'',             sched:'7:53' },
-  { emoji:'🪥', name:'刷牙',                dur: 5*60, note:'',             sched:'8:03' },
-  { emoji:'📖', name:'閱讀 / 冥想',         dur:17*60, note:'享受安靜時光',  sched:'8:08' },
-  { emoji:'🎒', name:'收拾包包 & 確認 MIT', dur: 5*60, note:'',             sched:'8:25', isMIT: true },
+/* ── UTILITIES ── */
+function $(id){return document.getElementById(id)}
+function pad(n){return String(n).padStart(2,'0')}
+function show(id,v){$(id).style.display=v?'block':'none'}
+
+/* ── TASKS ── */
+let TASKS=[
+  {emoji:'🧴',name:'洗臉',               dur:5*60, note:''},
+  {emoji:'💇',name:'整理頭髮',           dur:13*60,note:'放音樂享受 🎵'},
+  {emoji:'☕',name:'咖啡 + 早餐',        dur:20*60,note:'不看手機 📵'},
+  {emoji:'🚬',name:'抽菸',               dur:10*60,note:''},
+  {emoji:'🚽',name:'上廁所',             dur:15*60,note:''},
+  {emoji:'🪥',name:'刷牙',               dur:5*60, note:''},
+  {emoji:'📖',name:'閱讀 / 冥想',        dur:17*60,note:'享受安靜時光'},
+  {emoji:'🎒',name:'收拾包包 & 確認 MIT',dur:5*60, note:'',isMIT:true},
 ];
-
-const EVE_TASKS = [
-  { emoji:'📋', name:'確認明天行程',   note:'打開行事曆，掌握明天的重點'      },
-  { emoji:'👔', name:'備好明天的衣服', note:'整套放固定位置，省去早晨決策'    },
-  { emoji:'☕', name:'備好咖啡器具',   note:'豆子磨好、濾紙放好、水倒好'      },
-  { emoji:'🎒', name:'整理好包包',     note:'確認錢包、鑰匙、識別證、充電器'  },
-  { emoji:'📵', name:'手機靜音放床外', note:'設好 7:00 鬧鐘，只設一個'       },
-  { emoji:'🌙', name:'開始收心',       note:'調暗燈光、翻書，目標 11:00 前躺平' },
+const EVE=[
+  {emoji:'📋',name:'確認明天行程',  note:'打開行事曆，掌握明天的重點'},
+  {emoji:'👔',name:'備好明天的衣服',note:'整套放固定位置，省去早晨決策'},
+  {emoji:'☕',name:'備好咖啡器具',  note:'豆子磨好、濾紙放好、水倒好'},
+  {emoji:'🎒',name:'整理好包包',    note:'確認錢包、鑰匙、識別證、充電器'},
+  {emoji:'📵',name:'手機靜音放床外',note:'設好 7:00 鬧鐘，只設一個'},
+  {emoji:'🌙',name:'開始收心',      note:'調暗燈光、翻書，目標 11:00 前躺平'},
 ];
+const RING_C=2*Math.PI*80;
+const WALK_MIN=15;
 
-const C = 2 * Math.PI * 80; // SVG ring circumference (~502.655)
+/* ── STATE ── */
+let arrH=8,arrM=45;
+let curIdx=0,tLeft=0,tTotal=0,timerIv=null;
+let paused=false,autoMode=false,started=false,finished=false;
+let mitVal='',eveDone=loadEveningState(),drag=null;
 
-/* ═══════════════════════════════════════
-   STATE
-═══════════════════════════════════════ */
-let currentIdx = 0;
-let timeLeft   = 0;
-let timeTotal  = 0;
-let timerIv    = null;
-let paused     = false;
-let autoMode   = false;
-let started    = false;
-let finished   = false;
-let mitValue   = '';
-let eveDone    = loadEveningState();
-
-/* ═══════════════════════════════════════
-   UTILITIES  (defined first — hoisted)
-═══════════════════════════════════════ */
-function $(id) { return document.getElementById(id); }
-function pad(n) { return String(n).padStart(2, '0'); }
-function show(id, v) { $(id).style.display = v ? 'block' : 'none'; }
-
-/* ═══════════════════════════════════════
-   INIT
-═══════════════════════════════════════ */
-setInterval(tickClock, 1000);
-tickClock();
-renderEveningList();
-updateProgress();
-
-/* ═══════════════════════════════════════
-   TABS
-═══════════════════════════════════════ */
-function switchTab(tab) {
-  const isM = tab === 'morning';
-  $('tab-m').classList.toggle('active', isM);
-  $('tab-e').classList.toggle('active', !isM);
-  $('morning-pane').classList.toggle('active', isM);
-  $('evening-pane').classList.toggle('active', !isM);
+/* ── ARRIVAL & SCHEDULE ── */
+function totalTaskMins(){return TASKS.reduce((s,t)=>s+t.dur/60,0)}
+function startMins(){return arrH*60+arrM-WALK_MIN-totalTaskMins()}
+function departureMins(){return arrH*60+arrM-WALK_MIN}
+function calcSched(idx){
+  let m=startMins();
+  for(let i=0;i<idx;i++)m+=TASKS[i].dur/60;
+  return pad(Math.floor(m/60))+':'+pad(m%60);
+}
+function setArrival(val){
+  const[h,m]=val.split(':').map(Number);
+  arrH=h;arrM=m;
+  renderTasks();updateAll();
+}
+function updateWakeHint(){
+  const sm=startMins(),dm=departureMins();
+  $('wake-hint').textContent=
+    '建議 '+pad(Math.floor(sm/60))+':'+pad(sm%60)+'  起床'
+    +'  ·  '+pad(Math.floor(dm/60))+':'+pad(dm%60)+' 出門';
 }
 
-/* ═══════════════════════════════════════
-   CLOCK
-═══════════════════════════════════════ */
-function tickClock() {
-  const n = new Date();
-  $('clock').textContent = pad(n.getHours()) + ':' + pad(n.getMinutes());
+/* ── TABS / CLOCK ── */
+function switchTab(t){
+  const isM=t==='morning';
+  $('tab-m').classList.toggle('active',isM);
+  $('tab-e').classList.toggle('active',!isM);
+  $('morning-pane').classList.toggle('active',isM);
+  $('evening-pane').classList.toggle('active',!isM);
 }
+function tickClock(){const n=new Date();$('clock').textContent=pad(n.getHours())+':'+pad(n.getMinutes())}
 
-/* ═══════════════════════════════════════
-   ETA
-═══════════════════════════════════════ */
-function calcETA() {
-  if (!started || finished) return '—';
-  let rem = timeLeft;
-  for (let i = currentIdx + 1; i < TASKS.length; i++) rem += TASKS[i].dur;
-  const t = new Date(Date.now() + rem * 1000);
-  return pad(t.getHours()) + ':' + pad(t.getMinutes());
+/* ── PROGRESS + ETA ── */
+function calcETA(){
+  if(!started||finished)return null;
+  let r=tLeft;
+  for(let i=curIdx+1;i<TASKS.length;i++)r+=TASKS[i].dur;
+  const t=new Date(Date.now()+r*1000);
+  return pad(t.getHours())+':'+pad(t.getMinutes());
 }
-
-/* ═══════════════════════════════════════
-   PROGRESS BAR
-═══════════════════════════════════════ */
-function updateProgress() {
-  const fill = $('prog-fill'), text = $('prog-text'), eta = $('eta-val');
-  if (!started)  { fill.style.width = '0%'; text.textContent = '尚未開始'; eta.textContent = '—'; return; }
-  if (finished)  { fill.style.width = '100%'; text.textContent = '✅ 全部完成！'; eta.textContent = '—'; return; }
-  fill.style.width = (currentIdx / TASKS.length * 100) + '%';
-  text.textContent  = `${currentIdx} / ${TASKS.length} 完成`;
-  eta.textContent   = calcETA();
-}
-
-/* ═══════════════════════════════════════
-   RING TIMER
-═══════════════════════════════════════ */
-function updateRing() {
-  const prog = $('ring-prog'), rt = $('ring-time'), rs = $('ring-sub'), svg = $('ring-svg');
-  const frac   = timeTotal > 0 ? timeLeft / timeTotal : 0;
-  prog.style.strokeDashoffset = C * (1 - frac);
-  rt.textContent = pad(Math.floor(timeLeft / 60)) + ':' + pad(timeLeft % 60);
-  if (timeLeft === 0) {
-    prog.classList.add('done');
-    rs.textContent = '時間到！';
-    svg.classList.add('glowing');
+function updateAll(){
+  const fill=$('prog-fill'),ptxt=$('prog-text'),etxt=$('eta-text');
+  if(!started){
+    fill.style.width='0%';ptxt.textContent='尚未開始';etxt.textContent='';
+  } else if(finished){
+    fill.style.width='100%';ptxt.textContent='✅ 全部完成！';etxt.textContent='';
   } else {
-    prog.classList.remove('done');
-    rs.textContent = '剩餘';
-    svg.classList.remove('glowing');
+    fill.style.width=(curIdx/TASKS.length*100)+'%';
+    ptxt.textContent=curIdx+' / '+TASKS.length+' 完成';
+    const eta=calcETA();
+    etxt.innerHTML=eta?'預計完成 <span>'+eta+'</span>':'';
   }
+  updateWakeHint();
 }
 
-/* ═══════════════════════════════════════
-   LOAD TASK
-═══════════════════════════════════════ */
-function loadTask(idx) {
-  const t = TASKS[idx];
-  $('tc-emoji').textContent = t.emoji;
-  $('tc-name').textContent  = t.name;
-  $('tc-note').textContent  = t.note || '';
-  $('mit-box').style.display = t.isMIT ? 'block' : 'none';
-  timeLeft = t.dur;
-  timeTotal = t.dur;
-  updateRing();
-  renderTaskList();
-  updateProgress();
+/* ── RING ── */
+function updateRing(){
+  const prog=$('ring-prog'),rt=$('ring-time'),rs=$('ring-sub'),svg=$('ring-svg');
+  const frac=tTotal>0?tLeft/tTotal:0;
+  prog.style.strokeDashoffset=RING_C*(1-frac);
+  rt.textContent=pad(Math.floor(tLeft/60))+':'+pad(tLeft%60);
+  if(tLeft===0){prog.classList.add('done');rs.textContent='時間到！';svg.classList.add('glowing')}
+  else{prog.classList.remove('done');rs.textContent='剩餘';svg.classList.remove('glowing')}
 }
 
-/* ═══════════════════════════════════════
-   BEGIN ROUTINE
-═══════════════════════════════════════ */
-function beginRoutine() {
-  started    = true;
-  currentIdx = 0;
-  show('start-screen', false);
-  show('task-card',    true);
-  show('task-list',    true);
-  loadTask(0);
-  startTimer();
+/* ── LOAD TASK ── */
+function loadTask(idx){
+  const t=TASKS[idx];
+  $('tc-emoji').textContent=t.emoji;
+  $('tc-name').textContent=t.name;
+  $('tc-note').textContent=t.note||'';
+  $('mit-box').style.display=t.isMIT?'block':'none';
+  tLeft=t.dur;tTotal=t.dur;
+  updateRing();renderTasks();updateAll();
 }
 
-/* ═══════════════════════════════════════
-   TIMER
-═══════════════════════════════════════ */
-function startTimer() {
+/* ── ROUTINE ── */
+function beginRoutine(){
+  started=true;curIdx=0;
+  show('start-screen',false);show('task-card',true);
+  loadTask(0);startTimer();
+}
+function startTimer(){
+  clearInterval(timerIv);paused=false;$('pause-btn').textContent='⏸ 暫停';
+  timerIv=setInterval(()=>{
+    if(paused)return;
+    if(tLeft>0){tLeft--;updateRing();updateAll()}
+    else{clearInterval(timerIv);playChime();if(autoMode)setTimeout(completeTask,1800)}
+  },1000);
+}
+function togglePause(){paused=!paused;$('pause-btn').textContent=paused?'▶ 繼續':'⏸ 暫停'}
+function completeTask(){
   clearInterval(timerIv);
-  paused = false;
-  $('pause-btn').textContent = '⏸ 暫停';
-  timerIv = setInterval(() => {
-    if (paused) return;
-    if (timeLeft > 0) {
-      timeLeft--;
-      updateRing();
-      updateProgress();
-    } else {
-      clearInterval(timerIv);
-      playChime();
-      if (autoMode) setTimeout(completeTask, 1800);
-    }
-  }, 1000);
+  if(TASKS[curIdx].isMIT)mitVal=$('mit-input').value.trim();
+  curIdx++;
+  if(curIdx>=TASKS.length){finishRoutine();return}
+  loadTask(curIdx);startTimer();
 }
-
-function togglePause() {
-  paused = !paused;
-  $('pause-btn').textContent = paused ? '▶ 繼續' : '⏸ 暫停';
-}
-
-/* ═══════════════════════════════════════
-   COMPLETE / JUMP
-═══════════════════════════════════════ */
-function completeTask() {
+function jumpToTask(idx){
+  if(!started||finished||idx<=curIdx)return;
   clearInterval(timerIv);
-  if (TASKS[currentIdx].isMIT) mitValue = $('mit-input').value.trim();
-  currentIdx++;
-  if (currentIdx >= TASKS.length) { finishRoutine(); return; }
-  loadTask(currentIdx);
-  startTimer();
+  if(TASKS[curIdx].isMIT)mitVal=$('mit-input').value.trim();
+  curIdx=idx;loadTask(idx);startTimer();
+}
+function finishRoutine(){
+  finished=true;clearInterval(timerIv);
+  show('task-card',false);show('task-list',false);show('done-screen',true);
+  $('done-sub').innerHTML='早晨完美結束<br>預計 '+pad(arrH)+':'+pad(arrM)+' 抵達公司，加油！';
+  if(mitVal){$('done-mit').style.display='block';$('done-mit-text').textContent=mitVal}
+  updateAll();
+}
+function resetRoutine(){
+  started=finished=paused=false;curIdx=tLeft=tTotal=0;mitVal='';
+  clearInterval(timerIv);$('mit-input').value='';$('done-mit').style.display='none';
+  $('ring-prog').classList.remove('done');$('ring-svg').classList.remove('glowing');
+  show('done-screen',false);show('task-card',false);
+  show('task-list',true);show('start-screen',true);
+  renderTasks();updateAll();
 }
 
-function jumpToTask(idx) {
-  if (!started || finished || idx <= currentIdx) return;
-  clearInterval(timerIv);
-  if (TASKS[currentIdx].isMIT) mitValue = $('mit-input').value.trim();
-  currentIdx = idx;
-  loadTask(idx);
-  startTimer();
-}
+/* ── RENDER TASK LIST ── */
+const GRIP='<svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor">'
+  +'<circle cx="3" cy="3" r="1.5"/><circle cx="7" cy="3" r="1.5"/>'
+  +'<circle cx="3" cy="8" r="1.5"/><circle cx="7" cy="8" r="1.5"/>'
+  +'<circle cx="3" cy="13" r="1.5"/><circle cx="7" cy="13" r="1.5"/></svg>';
 
-/* ═══════════════════════════════════════
-   FINISH & RESET
-═══════════════════════════════════════ */
-function finishRoutine() {
-  finished = true;
-  clearInterval(timerIv);
-  show('task-card', false);
-  show('task-list', false);
-  show('done-screen', true);
-  if (mitValue) {
-    $('done-mit').style.display = 'block';
-    $('done-mit-text').textContent = mitValue;
-  }
-  updateProgress();
-}
-
-function resetRoutine() {
-  started = finished = paused = false;
-  currentIdx = timeLeft = timeTotal = 0;
-  mitValue = '';
-  clearInterval(timerIv);
-  $('mit-input').value = '';
-  $('done-mit').style.display = 'none';
-  $('ring-prog').classList.remove('done');
-  $('ring-svg').classList.remove('glowing');
-  show('done-screen',  false);
-  show('task-card',    false);
-  show('task-list',    false);
-  show('start-screen', true);
-  updateProgress();
-}
-
-/* ═══════════════════════════════════════
-   RENDER TASK LIST
-═══════════════════════════════════════ */
-function renderTaskList() {
-  $('task-list-items').innerHTML = TASKS.map((t, i) => {
-    const isDone    = i < currentIdx;
-    const isCurrent = i === currentIdx && started && !finished;
-    const cls = isDone ? 'done' : isCurrent ? 'current' : 'upcoming';
-    const icon = isDone
-      ? `<div class="ti-icon ic-done">✓</div>`
-      : isCurrent
-        ? `<div class="ti-icon ic-cur"></div>`
-        : `<div class="ti-icon ic-up"></div>`;
-    const clickable = !isDone && !isCurrent ? `onclick="jumpToTask(${i})"` : '';
-    return `
-      <div class="task-item ${cls}" ${clickable}>
-        ${icon}
-        <span class="ti-emoji">${t.emoji}</span>
-        <div class="ti-info">
-          <div class="ti-name">${t.name}</div>
-          <div class="ti-meta">${t.sched} ／ ${t.dur / 60} 分鐘</div>
-        </div>
-      </div>`;
+function renderTasks(){
+  $('tli').innerHTML=TASKS.map((t,i)=>{
+    const done=started&&i<curIdx;
+    const cur=started&&!finished&&i===curIdx;
+    const cls=done?'done':cur?'current':'';
+    const icon=done
+      ?'<div class="ti-icon ic-done">✓</div>'
+      :cur?'<div class="ti-icon ic-cur"></div>'
+      :'<div class="ti-icon ic-up"></div>';
+    const jump=(!done&&!cur&&started&&!finished)?'onclick="jumpToTask('+i+')"':'';
+    return '<div class="task-card '+cls+'" data-di="'+i+'" '+jump+'>'
+      +'<div class="drag-handle" onpointerdown="dragStart(event,'+i+')">'+GRIP+'</div>'
+      +icon+'<span class="ti-emoji">'+t.emoji+'</span>'
+      +'<div class="ti-info">'
+      +'<div class="ti-name">'+t.name+'</div>'
+      +'<div class="ti-meta">'+calcSched(i)+' ／ '+t.dur/60+' 分鐘</div>'
+      +'</div></div>';
   }).join('');
 }
 
-/* ═══════════════════════════════════════
-   CHIME
-═══════════════════════════════════════ */
-function playChime() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    [[880, 0], [1108, .18], [1320, .36]].forEach(([freq, delay]) => {
-      const osc = ctx.createOscillator(), gain = ctx.createGain();
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.type = 'sine'; osc.frequency.value = freq;
-      const t = ctx.currentTime + delay;
-      gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(.18, t + .06);
-      gain.gain.linearRampToValueAtTime(0,   t + .55);
-      osc.start(t); osc.stop(t + .6);
+/* ── DRAG AND DROP ── */
+function dragStart(e,fromIdx){
+  e.preventDefault();e.stopPropagation();
+  const handle=e.currentTarget;
+  const card=handle.closest('[data-di]');
+  const rect=card.getBoundingClientRect();
+  const list=$('tli');
+
+  // Ghost
+  const ghost=card.cloneNode(true);
+  ghost.classList.add('drag-ghost-el');
+  ghost.style.cssText+='top:'+rect.top+'px;left:'+rect.left+'px;width:'+rect.width+'px;height:'+rect.height+'px;';
+  document.body.appendChild(ghost);
+
+  // Spacer
+  const spacer=document.createElement('div');
+  spacer.className='drag-spacer';
+  spacer.style.height=rect.height+'px';
+  list.insertBefore(spacer,card);
+  card.style.display='none';
+
+  drag={fromIdx,card,ghost,spacer,list,
+    oy:e.clientY-rect.top,ox:e.clientX-rect.left,
+    pid:e.pointerId,gh:rect.height};
+  handle.setPointerCapture(e.pointerId);
+  document.addEventListener('pointermove',onMove,{passive:false});
+  document.addEventListener('pointerup',onUp);
+  document.addEventListener('pointercancel',onUp);
+}
+
+function onMove(e){
+  if(!drag)return;
+  e.preventDefault();
+  const{ghost,spacer,list,oy,ox,gh}=drag;
+  ghost.style.top=(e.clientY-oy)+'px';
+  ghost.style.left=(e.clientX-ox)+'px';
+
+  const cY=e.clientY-oy+gh/2;
+  const cards=[...list.querySelectorAll('.task-card')];
+  let target=null;
+  for(const c of cards){const r=c.getBoundingClientRect();if(cY<r.top+r.height/2){target=c;break}}
+
+  // FLIP animation
+  const before=cards.map(c=>c.getBoundingClientRect().top);
+  if(target)list.insertBefore(spacer,target);else list.appendChild(spacer);
+  cards.forEach((c,i)=>{
+    const delta=before[i]-c.getBoundingClientRect().top;
+    if(Math.abs(delta)>.5){c.style.transition='none';c.style.transform='translateY('+delta+'px)'}
+  });
+  list.offsetHeight;
+  cards.forEach(c=>{
+    if(c.style.transform){c.style.transition='transform 0.16s ease';c.style.transform=''}
+  });
+}
+
+function onUp(){
+  if(!drag)return;
+  const{fromIdx,card,ghost,spacer,list}=drag;
+
+  // Calc new index
+  const items=[...list.children];
+  const sp=items.indexOf(spacer);
+  let newIdx=0;
+  for(let i=0;i<sp;i++)if(items[i].classList.contains('task-card'))newIdx++;
+
+  // Reorder
+  if(newIdx!==fromIdx){
+    const task=TASKS.splice(fromIdx,1)[0];
+    TASKS.splice(newIdx,0,task);
+    if(started&&!finished){
+      if(fromIdx===curIdx)curIdx=newIdx;
+      else if(fromIdx<curIdx&&newIdx>=curIdx)curIdx--;
+      else if(fromIdx>curIdx&&newIdx<=curIdx)curIdx++;
+    }
+  }
+
+  ghost.remove();spacer.remove();card.style.display='';
+  [...list.querySelectorAll('.task-card')].forEach(c=>{c.style.transform='';c.style.transition=''});
+  drag=null;
+  document.removeEventListener('pointermove',onMove);
+  document.removeEventListener('pointerup',onUp);
+  document.removeEventListener('pointercancel',onUp);
+  renderTasks();updateAll();
+}
+
+/* ── CHIME ── */
+function playChime(){
+  try{
+    const ac=new(window.AudioContext||window.webkitAudioContext)();
+    [[880,0],[1108,.18],[1320,.36]].forEach(([f,dt])=>{
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.connect(g);g.connect(ac.destination);o.type='sine';o.frequency.value=f;
+      const t=ac.currentTime+dt;
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.18,t+.06);g.gain.linearRampToValueAtTime(0,t+.55);
+      o.start(t);o.stop(t+.6);
     });
-  } catch (e) {}
+  }catch(e){}
 }
 
-/* ═══════════════════════════════════════
-   EVENING TASKS  (localStorage)
-═══════════════════════════════════════ */
-function loadEveningState() {
-  try { return new Set(JSON.parse(localStorage.getItem('ian-eve') || '[]')); }
-  catch { return new Set(); }
+/* ── EVENING ── */
+function loadEveningState(){try{return new Set(JSON.parse(localStorage.getItem('ian-eve')||'[]'))}catch(e){return new Set()}}
+function saveEveningState(){try{localStorage.setItem('ian-eve',JSON.stringify([...eveDone]))}catch(e){}}
+function toggleEvening(i){eveDone.has(i)?eveDone.delete(i):eveDone.add(i);saveEveningState();renderEveningList()}
+function resetEvening(){eveDone=new Set();saveEveningState();renderEveningList()}
+function renderEveningList(){
+  $('e-list').innerHTML=EVE.map((t,i)=>
+    '<div class="e-item '+(eveDone.has(i)?'checked':'')+'" onclick="toggleEvening('+i+')">'
+    +'<div class="e-cb">'+(eveDone.has(i)?'✓':'')+'</div>'
+    +'<div class="e-emoji">'+t.emoji+'</div>'
+    +'<div class="e-body"><div class="e-name">'+t.name+'</div><div class="e-note">'+t.note+'</div></div>'
+    +'</div>'
+  ).join('');
+  const n=eveDone.size,tot=EVE.length;
+  $('e-prog-fill').style.width=(n/tot*100)+'%';
+  $('e-prog-text').textContent=n+' / '+tot+' 完成';
 }
-function saveEveningState() {
-  try { localStorage.setItem('ian-eve', JSON.stringify([...eveDone])); } catch {}
-}
-function toggleEvening(i) {
-  eveDone.has(i) ? eveDone.delete(i) : eveDone.add(i);
-  saveEveningState();
-  renderEveningList();
-}
-function resetEvening() { eveDone = new Set(); saveEveningState(); renderEveningList(); }
 
-function renderEveningList() {
-  $('e-list').innerHTML = EVE_TASKS.map((t, i) => `
-    <div class="e-item ${eveDone.has(i) ? 'checked' : ''}" onclick="toggleEvening(${i})">
-      <div class="e-cb">${eveDone.has(i) ? '✓' : ''}</div>
-      <div class="e-emoji">${t.emoji}</div>
-      <div class="e-body">
-        <div class="e-name">${t.name}</div>
-        <div class="e-note">${t.note}</div>
-      </div>
-    </div>`).join('');
-
-  const n = eveDone.size, total = EVE_TASKS.length;
-  $('e-prog-fill').style.width = (n / total * 100) + '%';
-  $('e-prog-text').textContent  = `${n} / ${total} 完成`;
-}
+/* ── INIT (placed last so all functions and consts are defined) ── */
+setInterval(tickClock,1000);tickClock();
+renderTasks();renderEveningList();updateAll();
 </script>
 </body>
 </html>
