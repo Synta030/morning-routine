@@ -30,16 +30,12 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .clock{font-family:'DM Mono',monospace;font-size:32px;font-weight:300;letter-spacing:-.03em}
 .arr-wrap{text-align:right}
 .arr-label{font-size:10px;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:2px}
-.arr-input-wrap{display:flex;align-items:center;gap:5px;justify-content:flex-end}
-.arr-emoji{font-size:15px}
+/* Native time input — no -webkit-appearance:none so Safari renders it properly */
 #arr-input{
   font-family:'DM Mono',monospace;font-size:20px;font-weight:500;
   border:none;border-bottom:2px solid var(--amb-d);background:transparent;
   color:var(--amber);outline:none;cursor:pointer;padding:0 2px;
-  width:82px;text-align:center;border-radius:0;
-  -webkit-appearance:none
 }
-#arr-input:focus{border-bottom-color:var(--amber)}
 .prog-bar{height:5px;background:var(--border);border-radius:100px;overflow:hidden;margin-bottom:7px}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--amber),var(--green));border-radius:100px;transition:width .5s ease;width:0%}
 .prog-foot{display:flex;justify-content:space-between;align-items:center}
@@ -79,7 +75,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 /* MIT */
 .mit-box{background:var(--sf2);border:1.5px solid var(--border);border-radius:13px;padding:12px 15px;margin-bottom:15px;display:none}
 .mit-label{font-size:10px;font-weight:700;color:var(--t2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
-input.mit-input{width:100%;border:none;background:transparent;font-family:inherit;font-size:15px;color:var(--t1);outline:none}
+input.mit-input{width:100%;border:none;background:transparent;font-family:inherit;font-size:15px;color:var(--t1);outline:none;-webkit-user-select:text;user-select:text}
 input.mit-input::placeholder{color:var(--t3)}
 
 /* BUTTONS */
@@ -103,18 +99,25 @@ input:checked~.toggle-knob::before{transform:translateX(19px)}
 .tl-title{font-size:11px;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase}
 .tl-hint{font-size:11px;color:var(--t3);opacity:.6}
 
-/* TASK CARDS (draggable) */
+/* DRAGGABLE TASK CARDS — Safari text-selection prevention */
+#tli{
+  -webkit-user-select:none;
+  user-select:none;
+}
 .task-card{
   display:flex;align-items:center;gap:10px;
   padding:10px 12px 10px 6px;border-radius:13px;margin-bottom:4px;
-  background:var(--surface);user-select:none;
+  background:var(--surface);
+  -webkit-user-select:none;user-select:none;
+  -webkit-touch-callout:none;
   transition:box-shadow .15s,opacity .2s;will-change:transform;
 }
 .task-card.done{opacity:.4}
 .task-card.current{background:var(--amb-l);border:1px solid var(--amb-d);box-shadow:0 2px 8px rgba(232,101,26,.12)}
 .drag-handle{
   cursor:grab;padding:4px 7px;color:var(--t3);flex-shrink:0;
-  touch-action:none;-webkit-user-select:none;
+  touch-action:none;
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
   display:flex;align-items:center;border-radius:6px;
   transition:color .15s,background .15s;-webkit-tap-highlight-color:transparent;
 }
@@ -128,6 +131,7 @@ input:checked~.toggle-knob::before{transform:translateX(19px)}
   opacity:.85;border-radius:13px;background:var(--surface);
   box-shadow:0 14px 44px rgba(26,26,62,.24);transform:scale(1.03);
   transition:none!important;will-change:top,left;
+  -webkit-user-select:none;user-select:none;
 }
 /* Drop spacer */
 .drag-spacer{background:var(--amb-l);border:1.5px dashed var(--amb-d);border-radius:13px;margin-bottom:4px;flex-shrink:0}
@@ -186,15 +190,12 @@ input:checked~.toggle-knob::before{transform:translateX(19px)}
 
 <div id="morning-pane" class="pane active">
 
-  <!-- Sticky header -->
   <div class="m-header">
     <div class="m-top">
       <div class="clock" id="clock">--:--</div>
       <div class="arr-wrap">
         <span class="arr-label">🚶 抵達公司</span>
-        <div class="arr-input-wrap">
-          <input type="time" id="arr-input" value="08:45" onchange="setArrival(this.value)">
-        </div>
+        <input type="time" id="arr-input" value="08:45" onchange="setArrival(this.value)">
       </div>
     </div>
     <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
@@ -204,7 +205,6 @@ input:checked~.toggle-knob::before{transform:translateX(19px)}
     </div>
   </div>
 
-  <!-- Start screen -->
   <div id="start-screen">
     <div class="s-greeting">早安 Ian ☀️</div>
     <div class="s-sub">今天是美好的一天</div>
@@ -218,7 +218,6 @@ input:checked~.toggle-knob::before{transform:translateX(19px)}
     <button class="btn-start" onclick="beginRoutine()">開始今天的早晨</button>
   </div>
 
-  <!-- Active task card -->
   <div id="task-card">
     <div class="tc-header">
       <div class="tc-emoji" id="tc-emoji"></div>
@@ -252,7 +251,6 @@ input:checked~.toggle-knob::before{transform:translateX(19px)}
     </div>
   </div>
 
-  <!-- Task list (always visible) -->
   <div id="task-list">
     <div class="tl-header">
       <span class="tl-title">今日行程</span>
@@ -261,7 +259,6 @@ input:checked~.toggle-knob::before{transform:translateX(19px)}
     <div id="tli"></div>
   </div>
 
-  <!-- Done screen -->
   <div id="done-screen">
     <div class="done-icon">🚶</div>
     <div class="done-title">出門！</div>
@@ -318,7 +315,7 @@ let curIdx=0,tLeft=0,tTotal=0,timerIv=null;
 let paused=false,autoMode=false,started=false,finished=false;
 let mitVal='',eveDone=loadEveningState(),drag=null;
 
-/* ── ARRIVAL & SCHEDULE ── */
+/* ── SCHEDULE HELPERS ── */
 function totalTaskMins(){return TASKS.reduce((s,t)=>s+t.dur/60,0)}
 function startMins(){return arrH*60+arrM-WALK_MIN-totalTaskMins()}
 function departureMins(){return arrH*60+arrM-WALK_MIN}
@@ -328,15 +325,13 @@ function calcSched(idx){
   return pad(Math.floor(m/60))+':'+pad(m%60);
 }
 function setArrival(val){
-  const[h,m]=val.split(':').map(Number);
-  arrH=h;arrM=m;
+  const parts=val.split(':');
+  arrH=parseInt(parts[0],10);arrM=parseInt(parts[1],10);
   renderTasks();updateAll();
 }
 function updateWakeHint(){
   const sm=startMins(),dm=departureMins();
-  $('wake-hint').textContent=
-    '建議 '+pad(Math.floor(sm/60))+':'+pad(sm%60)+'  起床'
-    +'  ·  '+pad(Math.floor(dm/60))+':'+pad(dm%60)+' 出門';
+  $('wake-hint').textContent='建議 '+pad(Math.floor(sm/60))+':'+pad(sm%60)+' 起床  ·  '+pad(Math.floor(dm/60))+':'+pad(dm%60)+' 出門';
 }
 
 /* ── TABS / CLOCK ── */
@@ -349,7 +344,7 @@ function switchTab(t){
 }
 function tickClock(){const n=new Date();$('clock').textContent=pad(n.getHours())+':'+pad(n.getMinutes())}
 
-/* ── PROGRESS + ETA ── */
+/* ── PROGRESS / ETA ── */
 function calcETA(){
   if(!started||finished)return null;
   let r=tLeft;
@@ -359,11 +354,9 @@ function calcETA(){
 }
 function updateAll(){
   const fill=$('prog-fill'),ptxt=$('prog-text'),etxt=$('eta-text');
-  if(!started){
-    fill.style.width='0%';ptxt.textContent='尚未開始';etxt.textContent='';
-  } else if(finished){
-    fill.style.width='100%';ptxt.textContent='✅ 全部完成！';etxt.textContent='';
-  } else {
+  if(!started){fill.style.width='0%';ptxt.textContent='尚未開始';etxt.textContent=''}
+  else if(finished){fill.style.width='100%';ptxt.textContent='✅ 全部完成！';etxt.textContent=''}
+  else{
     fill.style.width=(curIdx/TASKS.length*100)+'%';
     ptxt.textContent=curIdx+' / '+TASKS.length+' 完成';
     const eta=calcETA();
@@ -401,7 +394,7 @@ function beginRoutine(){
 }
 function startTimer(){
   clearInterval(timerIv);paused=false;$('pause-btn').textContent='⏸ 暫停';
-  timerIv=setInterval(()=>{
+  timerIv=setInterval(function(){
     if(paused)return;
     if(tLeft>0){tLeft--;updateRing();updateAll()}
     else{clearInterval(timerIv);playChime();if(autoMode)setTimeout(completeTask,1800)}
@@ -444,17 +437,16 @@ const GRIP='<svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor">
   +'<circle cx="3" cy="13" r="1.5"/><circle cx="7" cy="13" r="1.5"/></svg>';
 
 function renderTasks(){
-  $('tli').innerHTML=TASKS.map((t,i)=>{
-    const done=started&&i<curIdx;
-    const cur=started&&!finished&&i===curIdx;
-    const cls=done?'done':cur?'current':'';
-    const icon=done
-      ?'<div class="ti-icon ic-done">✓</div>'
+  $('tli').innerHTML=TASKS.map(function(t,i){
+    var done=started&&i<curIdx;
+    var cur=started&&!finished&&i===curIdx;
+    var cls=done?'done':cur?'current':'';
+    var icon=done?'<div class="ti-icon ic-done">✓</div>'
       :cur?'<div class="ti-icon ic-cur"></div>'
       :'<div class="ti-icon ic-up"></div>';
-    const jump=(!done&&!cur&&started&&!finished)?'onclick="jumpToTask('+i+')"':'';
+    var jump=(!done&&!cur&&started&&!finished)?'onclick="jumpToTask('+i+')"':'';
     return '<div class="task-card '+cls+'" data-di="'+i+'" '+jump+'>'
-      +'<div class="drag-handle" onpointerdown="dragStart(event,'+i+')">'+GRIP+'</div>'
+      +'<div class="drag-handle" onpointerdown="dragStart(event,'+i+')" oncontextmenu="return false">'+GRIP+'</div>'
       +icon+'<span class="ti-emoji">'+t.emoji+'</span>'
       +'<div class="ti-info">'
       +'<div class="ti-name">'+t.name+'</div>'
@@ -465,28 +457,34 @@ function renderTasks(){
 
 /* ── DRAG AND DROP ── */
 function dragStart(e,fromIdx){
-  e.preventDefault();e.stopPropagation();
-  const handle=e.currentTarget;
-  const card=handle.closest('[data-di]');
-  const rect=card.getBoundingClientRect();
-  const list=$('tli');
+  e.preventDefault();
+  e.stopPropagation();
+  /* Lock text selection globally during drag (Safari fix) */
+  document.documentElement.style.webkitUserSelect='none';
+  document.documentElement.style.userSelect='none';
 
-  // Ghost
-  const ghost=card.cloneNode(true);
+  var handle=e.currentTarget;
+  var card=handle.closest('[data-di]');
+  var rect=card.getBoundingClientRect();
+  var list=$('tli');
+
+  var ghost=card.cloneNode(true);
   ghost.classList.add('drag-ghost-el');
-  ghost.style.cssText+='top:'+rect.top+'px;left:'+rect.left+'px;width:'+rect.width+'px;height:'+rect.height+'px;';
+  ghost.style.top=rect.top+'px';
+  ghost.style.left=rect.left+'px';
+  ghost.style.width=rect.width+'px';
+  ghost.style.height=rect.height+'px';
   document.body.appendChild(ghost);
 
-  // Spacer
-  const spacer=document.createElement('div');
+  var spacer=document.createElement('div');
   spacer.className='drag-spacer';
   spacer.style.height=rect.height+'px';
   list.insertBefore(spacer,card);
   card.style.display='none';
 
-  drag={fromIdx,card,ghost,spacer,list,
-    oy:e.clientY-rect.top,ox:e.clientX-rect.left,
-    pid:e.pointerId,gh:rect.height};
+  drag={fromIdx:fromIdx,card:card,ghost:ghost,spacer:spacer,list:list,
+    oy:e.clientY-rect.top,ox:e.clientX-rect.left,gh:rect.height,
+    pid:e.pointerId};
   handle.setPointerCapture(e.pointerId);
   document.addEventListener('pointermove',onMove,{passive:false});
   document.addEventListener('pointerup',onUp);
@@ -496,41 +494,45 @@ function dragStart(e,fromIdx){
 function onMove(e){
   if(!drag)return;
   e.preventDefault();
-  const{ghost,spacer,list,oy,ox,gh}=drag;
-  ghost.style.top=(e.clientY-oy)+'px';
-  ghost.style.left=(e.clientX-ox)+'px';
+  drag.ghost.style.top=(e.clientY-drag.oy)+'px';
+  drag.ghost.style.left=(e.clientX-drag.ox)+'px';
 
-  const cY=e.clientY-oy+gh/2;
-  const cards=[...list.querySelectorAll('.task-card')];
-  let target=null;
-  for(const c of cards){const r=c.getBoundingClientRect();if(cY<r.top+r.height/2){target=c;break}}
+  var cY=e.clientY-drag.oy+drag.gh/2;
+  var cards=Array.prototype.slice.call(drag.list.querySelectorAll('.task-card'));
+  var target=null;
+  for(var i=0;i<cards.length;i++){
+    var r=cards[i].getBoundingClientRect();
+    if(cY<r.top+r.height/2){target=cards[i];break}
+  }
 
-  // FLIP animation
-  const before=cards.map(c=>c.getBoundingClientRect().top);
-  if(target)list.insertBefore(spacer,target);else list.appendChild(spacer);
-  cards.forEach((c,i)=>{
-    const delta=before[i]-c.getBoundingClientRect().top;
+  /* FLIP animation */
+  var before=cards.map(function(c){return c.getBoundingClientRect().top});
+  if(target)drag.list.insertBefore(drag.spacer,target);
+  else drag.list.appendChild(drag.spacer);
+  cards.forEach(function(c,i){
+    var delta=before[i]-c.getBoundingClientRect().top;
     if(Math.abs(delta)>.5){c.style.transition='none';c.style.transform='translateY('+delta+'px)'}
   });
-  list.offsetHeight;
-  cards.forEach(c=>{
+  drag.list.offsetHeight;
+  cards.forEach(function(c){
     if(c.style.transform){c.style.transition='transform 0.16s ease';c.style.transform=''}
   });
 }
 
 function onUp(){
   if(!drag)return;
-  const{fromIdx,card,ghost,spacer,list}=drag;
+  /* Restore text selection */
+  document.documentElement.style.webkitUserSelect='';
+  document.documentElement.style.userSelect='';
 
-  // Calc new index
-  const items=[...list.children];
-  const sp=items.indexOf(spacer);
-  let newIdx=0;
-  for(let i=0;i<sp;i++)if(items[i].classList.contains('task-card'))newIdx++;
+  var fromIdx=drag.fromIdx,card=drag.card,ghost=drag.ghost,spacer=drag.spacer,list=drag.list;
+  var items=Array.prototype.slice.call(list.children);
+  var sp=items.indexOf(spacer);
+  var newIdx=0;
+  for(var i=0;i<sp;i++)if(items[i].classList.contains('task-card'))newIdx++;
 
-  // Reorder
   if(newIdx!==fromIdx){
-    const task=TASKS.splice(fromIdx,1)[0];
+    var task=TASKS.splice(fromIdx,1)[0];
     TASKS.splice(newIdx,0,task);
     if(started&&!finished){
       if(fromIdx===curIdx)curIdx=newIdx;
@@ -540,7 +542,9 @@ function onUp(){
   }
 
   ghost.remove();spacer.remove();card.style.display='';
-  [...list.querySelectorAll('.task-card')].forEach(c=>{c.style.transform='';c.style.transition=''});
+  Array.prototype.slice.call(list.querySelectorAll('.task-card')).forEach(function(c){
+    c.style.transform='';c.style.transition='';
+  });
   drag=null;
   document.removeEventListener('pointermove',onMove);
   document.removeEventListener('pointerup',onUp);
@@ -551,11 +555,12 @@ function onUp(){
 /* ── CHIME ── */
 function playChime(){
   try{
-    const ac=new(window.AudioContext||window.webkitAudioContext)();
-    [[880,0],[1108,.18],[1320,.36]].forEach(([f,dt])=>{
-      const o=ac.createOscillator(),g=ac.createGain();
+    var ac=new(window.AudioContext||window.webkitAudioContext)();
+    [[880,0],[1108,.18],[1320,.36]].forEach(function(pair){
+      var f=pair[0],dt=pair[1];
+      var o=ac.createOscillator(),g=ac.createGain();
       o.connect(g);g.connect(ac.destination);o.type='sine';o.frequency.value=f;
-      const t=ac.currentTime+dt;
+      var t=ac.currentTime+dt;
       g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.18,t+.06);g.gain.linearRampToValueAtTime(0,t+.55);
       o.start(t);o.stop(t+.6);
     });
@@ -563,24 +568,30 @@ function playChime(){
 }
 
 /* ── EVENING ── */
-function loadEveningState(){try{return new Set(JSON.parse(localStorage.getItem('ian-eve')||'[]'))}catch(e){return new Set()}}
-function saveEveningState(){try{localStorage.setItem('ian-eve',JSON.stringify([...eveDone]))}catch(e){}}
+function loadEveningState(){
+  try{return new Set(JSON.parse(localStorage.getItem('ian-eve')||'[]'))}
+  catch(e){return new Set()}
+}
+function saveEveningState(){
+  try{localStorage.setItem('ian-eve',JSON.stringify(Array.from(eveDone)))}
+  catch(e){}
+}
 function toggleEvening(i){eveDone.has(i)?eveDone.delete(i):eveDone.add(i);saveEveningState();renderEveningList()}
 function resetEvening(){eveDone=new Set();saveEveningState();renderEveningList()}
 function renderEveningList(){
-  $('e-list').innerHTML=EVE.map((t,i)=>
-    '<div class="e-item '+(eveDone.has(i)?'checked':'')+'" onclick="toggleEvening('+i+')">'
+  $('e-list').innerHTML=EVE.map(function(t,i){
+    return '<div class="e-item '+(eveDone.has(i)?'checked':'')+'" onclick="toggleEvening('+i+')">'
     +'<div class="e-cb">'+(eveDone.has(i)?'✓':'')+'</div>'
     +'<div class="e-emoji">'+t.emoji+'</div>'
     +'<div class="e-body"><div class="e-name">'+t.name+'</div><div class="e-note">'+t.note+'</div></div>'
-    +'</div>'
-  ).join('');
-  const n=eveDone.size,tot=EVE.length;
+    +'</div>';
+  }).join('');
+  var n=eveDone.size,tot=EVE.length;
   $('e-prog-fill').style.width=(n/tot*100)+'%';
   $('e-prog-text').textContent=n+' / '+tot+' 完成';
 }
 
-/* ── INIT (placed last so all functions and consts are defined) ── */
+/* ── INIT (last — all consts/functions defined above) ── */
 setInterval(tickClock,1000);tickClock();
 renderTasks();renderEveningList();updateAll();
 </script>
