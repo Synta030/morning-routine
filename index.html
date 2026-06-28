@@ -4,7 +4,52 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ian 的晨間助手 ☀️</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="晨間助手">
+<link id="pwa-icon" rel="apple-touch-icon" sizes="180x180" href="">
+<script>
+/* Generate home screen icon via Canvas */
+(function(){
+  try{
+    var c=document.createElement('canvas');
+    c.width=c.height=180;
+    var x=c.getContext('2d');
+    /* Rounded-square background (#E8651A amber) */
+    var r=36;
+    x.beginPath();
+    x.moveTo(r,0);x.lineTo(180-r,0);
+    x.quadraticCurveTo(180,0,180,r);
+    x.lineTo(180,180-r);
+    x.quadraticCurveTo(180,180,180-r,180);
+    x.lineTo(r,180);
+    x.quadraticCurveTo(0,180,0,180-r);
+    x.lineTo(0,r);
+    x.quadraticCurveTo(0,0,r,0);
+    x.closePath();
+    var bg=x.createLinearGradient(0,0,180,180);
+    bg.addColorStop(0,'#F07830');bg.addColorStop(1,'#D05010');
+    x.fillStyle=bg;x.fill();
+    /* Sun body */
+    var sun=x.createRadialGradient(82,78,4,90,86,38);
+    sun.addColorStop(0,'#FFE97A');sun.addColorStop(1,'#FFBE00');
+    x.fillStyle=sun;
+    x.beginPath();x.arc(90,86,36,0,Math.PI*2);x.fill();
+    /* Sun rays */
+    x.strokeStyle='#FFD740';x.lineWidth=7;x.lineCap='round';
+    for(var i=0;i<8;i++){
+      var a=i*Math.PI/4;
+      x.beginPath();
+      x.moveTo(90+50*Math.cos(a),86+50*Math.sin(a));
+      x.lineTo(90+68*Math.cos(a),86+68*Math.sin(a));
+      x.stroke();
+    }
+    /* Set as apple-touch-icon */
+    var lnk=document.getElementById('pwa-icon');
+    if(lnk)lnk.href=c.toDataURL('image/png');
+  }catch(e){}
+})();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
