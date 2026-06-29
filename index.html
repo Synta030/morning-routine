@@ -85,8 +85,9 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--amber),var(--green));border-radius:100px;transition:width .5s ease;width:0%}
 .prog-foot{display:flex;justify-content:space-between;align-items:center}
 .prog-text{font-size:12px;color:var(--t3);font-weight:500}
-.eta-text{font-size:12px;color:var(--t3);font-weight:500}
-.eta-text span{color:var(--t2);font-family:'DM Mono',monospace}
+.eta-text{font-size:12px;color:var(--t3);font-weight:500;white-space:nowrap;text-align:right;line-height:1.5}
+.eta-abs{color:var(--t2);font-family:'DM Mono',monospace;font-size:13px}
+.eta-rem{font-size:11px;color:var(--t3)}
 
 /* START SCREEN */
 #start-screen{padding:32px 24px 22px;text-align:center}
@@ -189,6 +190,7 @@ input:checked~.toggle-knob::before{transform:translateX(19px)}
 @keyframes dot-pulse{0%,100%{box-shadow:0 0 0 0 rgba(232,101,26,.5)}60%{box-shadow:0 0 0 5px rgba(232,101,26,0)}}
 .ti-emoji{font-size:18px;flex-shrink:0}
 .ti-info{flex:1;min-width:0}
+.ti-eta{font-size:11px;color:var(--amber);font-family:'DM Mono',monospace;font-weight:500;margin-top:3px}
 .ti-name{font-size:15px;font-weight:500}
 .ti-meta{font-size:12px;color:var(--t3);font-family:'DM Mono',monospace}
 .task-card.done .ti-name{color:var(--t3)}
@@ -399,13 +401,24 @@ function calcETA(){
 }
 function updateAll(){
   const fill=$('prog-fill'),ptxt=$('prog-text'),etxt=$('eta-text');
-  if(!started){fill.style.width='0%';ptxt.textContent='尚未開始';etxt.textContent=''}
-  else if(finished){fill.style.width='100%';ptxt.textContent='✅ 全部完成！';etxt.textContent=''}
+  if(!started){fill.style.width='0%';ptxt.textContent='尚未開始';etxt.innerHTML=''}
+  else if(finished){fill.style.width='100%';ptxt.textContent='✅ 全部完成！';etxt.innerHTML=''}
   else{
     fill.style.width=(curIdx/TASKS.length*100)+'%';
     ptxt.textContent=curIdx+' / '+TASKS.length+' 完成';
-    const eta=calcETA();
-    etxt.innerHTML=eta?'預計完成 <span>'+eta+'</span>':'';
+    let r=tLeft;
+    for(let i=curIdx+1;i<TASKS.length;i++)r+=TASKS[i].dur;
+    const t=new Date(Date.now()+r*1000);
+    const absTime=pad(t.getHours())+':'+pad(t.getMinutes());
+    const remM=Math.floor(r/60),remS=r%60;
+    etxt.innerHTML='<span class="eta-abs">'+absTime+'</span> 完成<br>'
+      +'<span class="eta-rem">還剩 '+pad(remM)+':'+pad(remS)+'</span>';
+    // Update current task's own ETA (every second)
+    const taskEtaEl=$('task-eta-display');
+    if(taskEtaEl&&tLeft>0){
+      const ft=new Date(Date.now()+tLeft*1000);
+      taskEtaEl.textContent='→ '+pad(ft.getHours())+':'+pad(ft.getMinutes())+' 完成';
+    }
   }
   updateWakeHint();
 }
@@ -490,12 +503,14 @@ function renderTasks(){
       :cur?'<div class="ti-icon ic-cur"></div>'
       :'<div class="ti-icon ic-up"></div>';
     var jump=(!done&&!cur&&started&&!finished)?'onclick="jumpToTask('+i+')"':'';
+    var taskETA = isCurrent ? '<div class="ti-eta" id="task-eta-display"></div>' : '';
     return '<div class="task-card '+cls+'" data-di="'+i+'" '+jump+'>'
       +'<div class="drag-handle" onpointerdown="dragStart(event,'+i+')" oncontextmenu="return false">'+GRIP+'</div>'
       +icon+'<span class="ti-emoji">'+t.emoji+'</span>'
       +'<div class="ti-info">'
       +'<div class="ti-name">'+t.name+'</div>'
       +'<div class="ti-meta">'+calcSched(i)+' ／ '+t.dur/60+' 分鐘</div>'
+      +taskETA
       +'</div></div>';
   }).join('');
 }
