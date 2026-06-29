@@ -503,7 +503,7 @@ function renderTasks(){
       :cur?'<div class="ti-icon ic-cur"></div>'
       :'<div class="ti-icon ic-up"></div>';
     var jump=(!done&&!cur&&started&&!finished)?'onclick="jumpToTask('+i+')"':'';
-    var taskETA = isCurrent ? '<div class="ti-eta" id="task-eta-display"></div>' : '';
+    var taskETA = cur ? '<div class="ti-eta" id="task-eta-display"></div>' : '';
     return '<div class="task-card '+cls+'" data-di="'+i+'" '+jump+'>'
       +'<div class="drag-handle" onpointerdown="dragStart(event,'+i+')" oncontextmenu="return false">'+GRIP+'</div>'
       +icon+'<span class="ti-emoji">'+t.emoji+'</span>'
